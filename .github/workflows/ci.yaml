@@ -1,0 +1,20 @@
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: Docker Login
+      env:  
+        DOCKER_USER: ${{ secrets.DOCKERHUB_USER }}
+        DOCKER_PWD: ${{ secrets.DOCKERHUB_PWD }}
+      run: |
+          docker login -u $DOCKER_USER -p $DOCKER_PWD
+    
+    - name: Docker Build
+      run: |
+        docker build . -t sanjitmisra/labdem0:${{ github.sha }}
+    
+    - name: Docker Push
+      run: |
+        docker push sanjitmisra/labdem0:${{ github.sha }}
